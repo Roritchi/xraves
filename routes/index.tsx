@@ -7,12 +7,6 @@ import { HandlerContext } from "$fresh/server.ts";
 export const handler = async (_req: Request, _ctx: HandlerContext) : Promise<Response> => {
   const users = await User.find().toArray();
 
-  User.insertOne({
-    username: Math.random().toString(),
-    password: Math.random().toString(),
-    phone: Math.random().toString(),
-  } as UserSchema)
-
   return _ctx.render({ users })
 }
 
@@ -37,7 +31,7 @@ export default function Home({ data: { users } }: HomeProps) {
         />
         <p class={tw`my-6`}>
           {users.map(user => (<div>
-            <p>{user.username}</p>
+            <p>{user.email}</p>
           </div>))}
         </p>
       </div>

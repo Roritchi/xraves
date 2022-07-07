@@ -14,13 +14,13 @@ export const handler: Handlers<LoginProps> = {
 
     if(page == LoginPage.Register) {
       User.insertOne({
-        username: data.get("username") as string,
+        email: data.get("email") as string,
         password: data.get("password") as string,
         phone: data.get("phone") as string,
       } as UserSchema)
     } else if(page == LoginPage.Login) {
       User.findOne({
-        username: data.get("username") as string,
+        email: data.get("email") as string,
         password: data.get("password") as string,
         phone: data.get("phone") as string,
       })

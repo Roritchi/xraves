@@ -19,7 +19,7 @@ export enum UserType {
 
 export interface UserSchema {
     _id: ObjectId;
-    username: string;
+    email: string;
     phone: string;
     password: string;
     type: UserType;

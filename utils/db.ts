@@ -5,6 +5,7 @@ import {
   } from "https://deno.land/x/mongo@v0.30.1/mod.ts";
   
 const client = new MongoClient();
+console.log(Deno.env.get("MONGO_URI"))
 await client.connect(Deno.env.get("MONGO_URI") as string);
 
 const db = client.database("xraves");

@@ -2,15 +2,27 @@
 import { h } from "preact";
 import { tw } from "@twind";
 import { UserSchema, User } from "../utils/db.ts"
+import { HandlerContext } from "$fresh/server.ts";
 
-const users = await User.find().toArray();
+export const handler = async (_req: Request, _ctx: HandlerContext) : Promise<Response> => {
+  const users = await User.find().toArray();
 
-export default function Home() {
   User.insertOne({
     username: Math.random().toString(),
     password: Math.random().toString(),
     phone: Math.random().toString(),
   } as UserSchema)
+
+  return _ctx.render({ users })
+}
+
+interface HomeProps {
+  data: {
+    users: Array<UserSchema>;
+  }
+}
+
+export default function Home({ data: { users } }: HomeProps) {
 
   return (
     <div class={tw`w-screen h-screen bg-[#333] text-white`}>
@@ -25,7 +37,7 @@ export default function Home() {
         />
         <p class={tw`my-6`}>
           {users.map(user => (<div>
-            <p>{JSON.stringify(user)}</p>
+            <p>{user.username}</p>
           </div>))}
         </p>
       </div>

@@ -3,4 +3,3 @@ export const key = await crypto.subtle.generateKey(
     true,
     ["sign", "verify"],
 );
-  

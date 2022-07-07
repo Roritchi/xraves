@@ -21,45 +21,26 @@ const LOGIN_TYPE_BUTTONS = [
 ]
 
 export enum LoginPage {
+  Login,
   Register,
-  Login
 }
 
-interface LoginProps {
+export interface LoginProps {
   page: LoginPage;
+  type: LoginType;
 }
-
-export const handler: Handlers<LoginProps> = {
-  GET(req) {
-    return new Response("test");
-  },
-  async POST(req, ctx) {
-    console.log('5655');
-
-    const url = new URL(req.url);
-    const type = parseInt(url.searchParams.get("type") || "0") as LoginPage;
-    const results = ["true"];
-
-    console.log(url)
-    console.log(type)
-
-    const resp = await ctx.render({ page: type });
-    resp.headers.set("X-Custom-Header", "Hello");
-    return resp;
-  },
-};
 
 export default function Login(props: LoginProps) {
   console.log(props)
-  const [page, setPage] = useState(props.page);
-  const [type, setType] = useState(LoginType.Default);
+  const [page, setPage] = useState(props.page || 0);
+  const [type, setType] = useState(props.type || LoginType.Default);
 
   return (
     <div class={tw`w-full`}>
       <button class={tw`w-1/2 p-2 border-none focus:outline-none hover:opacity-75`} style={{ borderBottom: page == LoginPage.Login ? '2px solid red' : '' }} onClick={() => setPage(LoginPage.Login)}>Login</button>
       <button class={tw`w-1/2 p-2 border-none focus:outline-none hover:opacity-75`} style={{ borderBottom: page == LoginPage.Register ? '2px solid red' : '' }} onClick={() => setPage(LoginPage.Register)}>Register</button>
       <div hidden={page != LoginPage.Register} class={tw`w-full p-2`}>
-        <form>
+        <form action="/login" method="post">
           <input type="hidden" name="page" value={page} />
           <input type="hidden" name="type" value={type} />
 
@@ -78,7 +59,7 @@ export default function Login(props: LoginProps) {
         )) }
       </div>
       <div hidden={page != LoginPage.Login} class={tw`w-full p-2`}>
-        <form method="post">
+        <form action="/login" method="post">
           <input type="hidden" name="page" value={page} />
           <input type="hidden" name="type" value={type} />
 

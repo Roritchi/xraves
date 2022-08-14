@@ -9,13 +9,17 @@ generator client {
 
 model User {
   id    String @id @default(cuid())
-  email String @unique
+  email String?
+  phone String?
+  username String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   password Password?
   notes    Note[]
+  events   Event[]
+  locations Location[]
 }
 
 model Password {
@@ -35,6 +39,59 @@ model Note {
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
+}
+
+model Event {
+  id    String @id @default(cuid())
+  title String
+  body  String
+  price Price[]
+  groups Group[]
+  organizers Organizer[]
+  area String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  location Location? @relation(name: "EventLocation", fields: [locationId], references: [id])
+  locationId String?
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+}
+
+model Location {
+  id    String @id @default(cuid())
+
+  name String
+
+  events Event[] @relation(name: "EventLocation")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+}
+
+model Price {
+  amount  Int?
+  type    String?
+
+  event   Event   @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  eventId String  @unique
+}
+
+model Group {
+  name  String
+  link  String
+
+  event   Event   @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  eventId String  @unique
+}
+
+model Organizer {
+  name  String
+
+  event   Event   @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  eventId String  @unique
 }
 
 model Poll {

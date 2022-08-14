@@ -14,10 +14,14 @@ import {
 } from "@remix-run/react";
 
 import tailwindStylesheetUrl from "./styles/tailwind.css";
+import masterStylesheetUrl from "./styles/master.css";
 import { getUser } from "./session.server";
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: tailwindStylesheetUrl }];
+  return [
+    { rel: "stylesheet", href: tailwindStylesheetUrl },
+    { rel: "stylesheet", href: masterStylesheetUrl },
+  ];
 };
 
 export const meta: MetaFunction = () => ({
@@ -43,11 +47,30 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-full bg-neutral-800 text-white">
+      <body className="h-full bg-[#303338] text-white">
         <Outlet />
         <ScrollRestoration />
-        <Scripts />
+        {/*<Scripts />*/}
         <LiveReload />
+      </body>
+    </html>
+  );
+}
+
+export function ErrorBoundary({ error } : { error : Error }) {
+  console.error(error);
+
+  return (
+    <html>
+      <head>
+        <title>Oh no!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        {/* add the UI you want your users to see */}
+        <h1>Welp...</h1>
+        <Scripts />
       </body>
     </html>
   );

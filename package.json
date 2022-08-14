@@ -12,7 +12,7 @@
     "format": "prettier --write .",
     "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-    "setup": "prisma generate && prisma migrate deploy && prisma db seed",
+    "setup": "prisma generate && prisma migrate deploy && prisma migrate dev && prisma db seed && prisma db push --accept-data-loss",
     "start": "remix-serve build",
     "start:mocks": "binode --require ./mocks -- @remix-run/serve:remix-serve build",
     "test": "vitest",
@@ -35,6 +35,7 @@
     "@remix-run/serve": "^1.6.4",
     "@remix-run/server-runtime": "^1.6.4",
     "bcryptjs": "^2.4.3",
+    "libphonenumber-js": "^1.10.8",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "tiny-invariant": "^1.2.0"

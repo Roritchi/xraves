@@ -12,6 +12,7 @@ import { getUserId, createUserSession } from "~/session.server";
 import { createUser, getUserByEmail } from "~/models/user.server";
 import { safeRedirect, validateEmail } from "~/utils";
 import Header from "~/components/header";
+import { parsePhoneNumber } from "libphonenumber-js";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await getUserId(request);
@@ -29,10 +30,28 @@ interface ActionData {
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const email = formData.get("email");
+  const phone = formData.get("phone");
   const password = formData.get("password");
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
 
+  const phoneNum = phone ? parsePhoneNumber(phone as string, 'DE') : null;
+
+  const invalids = [];
+  const valids = [];
+
   if (!validateEmail(email)) {
+    invalids.push({ email: "Email is invalid" });
+  } else {
+    valids.push('email')
+  }
+
+  if (!phoneNum || !phoneNum.isValid()) {
+    invalids.push({ phone: "Phone is invalid" });
+  } else {
+    valids.push('phone')
+  }
+
+  if(!valids.length) {
     return json<ActionData>(
       { errors: { email: "Email is invalid" } },
       { status: 400 }
@@ -53,15 +72,19 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  const existingUser = await getUserByEmail(email);
-  if (existingUser) {
+  const existingUsers = [];
+
+  if(valids.includes('email')) existingUsers.push(getUserByEmail(email as string))
+  if(valids.includes('phone') && phoneNum) existingUsers.push(getUserByEmail(phoneNum.formatInternational()))
+
+  if (existingUsers.length) {
     return json<ActionData>(
-      { errors: { email: "A user already exists with this email" } },
+      { errors: { email: "A user already exists with this email or phone" } },
       { status: 400 }
     );
   }
 
-  const user = await createUser(email, password);
+  const user = await createUser(email as string|undefined ?? null, phoneNum?.formatInternational() ?? null, password);
 
   return createUserSession({
     request,

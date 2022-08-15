@@ -15,12 +15,13 @@ export default function Index() {
             <div className="relative sm:overflow-hidden sm:rounded-2xl">
               <div className="relative px-4 pt-16 pb-2 sm:px-6 sm:pt-4 pb-8 lg:px-8 lg:pt-4">
                 <h1 className="text-center text-6xl font-extrabold tracking-tight sm:text-8xl lg:text-9xl">
-                  <span className="block uppercase text-yellow-500 drop-shadow-md">
+                  <span className="uppercase text-yellow-500 drop-shadow-md">
                     noraves
                   </span>
+                  <span className="text-lg font-mono font-normal ml-2 text-gray-300 whitespace-pre">/ˈnɔːrə/ NOR-ə</span>
                 </h1>
                 <p className="mx-auto mt-6 max-w-lg text-center text-xl text-white sm:max-w-3xl">
-                  Dein Ort für alle Rave Infos rund um Köln und Umgebung!
+                  Dein Ort für alle Rave Infos rund um Köln / Bonn!
                 </p>
                 <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
                   {user ? (

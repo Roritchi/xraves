@@ -20,6 +20,10 @@ model User {
   notes    Note[]
   events   Event[]
   locations Location[]
+
+  polls Poll[]
+  questions Question[]
+  answers Answer[]
 }
 
 model Password {
@@ -100,7 +104,7 @@ model Poll {
   body  String
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt#
+  updatedAt DateTime @updatedAt
 
   questions Question[]
 
